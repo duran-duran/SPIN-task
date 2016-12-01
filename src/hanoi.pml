@@ -17,8 +17,6 @@ active proctype Hanoi() {
   t[0].p[1].type = 1;
   t[0].p[1].size = 1;
 
-  t[1].q = 0;
-
   t[2].q = 2;
   t[2].p[0].type = 2;
   t[2].p[0].size = 2;
@@ -70,4 +68,18 @@ active proctype Hanoi() {
 #define c2 ((t[2].p[1].type == t[2].p[2].type) -> (t[2].p[1].size >= t[2].p[2].size))
 #define c3 ((t[2].p[2].type == t[2].p[3].type) -> (t[2].p[2].size >= t[2].p[3].size))
 
-ltl first{<>(((Hanoi@REPEAT) -> ((a1 && a2 && a3) && (b1 && b2 && b3) && (c1 && c2 && c3))) U (Hanoi@FINISH))}
+ltl first{((Hanoi@REPEAT) -> ((a1 && a2 && a3) && (b1 && b2 && b3) && (c1 && c2 && c3))) U (Hanoi@FINISH)}
+
+#define a11 ((t[0].p[0].type != 0) -> (t[0].p[0].size != t[0].p[1].size))
+#define a21 ((t[0].p[1].type != 0) -> (t[0].p[1].size != t[0].p[2].size))
+#define a31 ((t[0].p[2].type != 0) -> (t[0].p[2].size != t[0].p[3].size))
+
+#define b11 ((t[1].p[0].type != 0) -> (t[1].p[0].size != t[1].p[1].size))
+#define b21 ((t[1].p[1].type != 0) -> (t[1].p[1].size != t[1].p[2].size))
+#define b31 ((t[1].p[2].type != 0) -> (t[1].p[2].size != t[1].p[3].size))
+
+#define c11 ((t[2].p[0].type != 0) -> (t[2].p[0].size != t[2].p[1].size))
+#define c21 ((t[2].p[1].type != 0) -> (t[2].p[1].size != t[2].p[2].size))
+#define c31 ((t[2].p[2].type != 0) -> (t[2].p[2].size != t[2].p[3].size))
+
+ltl second{((Hanoi@REPEAT) -> (((a1 && a2 && a3) && (b1 && b2 && b3) && (c1 && c2 && c3)) && ((a11 && a21 && a31) && (b11 && b21 && b31) && (c11 && c21 && c31)))) U (Hanoi@FINISH)}
