@@ -10,7 +10,7 @@ typedef tower {
 
 tower t[3];
 
-active proctype HanoiDoubleTowers() {
+active proctype Hanoi() {
   t[0].q = 2;
   t[0].p[0].type = 1;
   t[0].p[0].size = 2;
@@ -25,7 +25,7 @@ active proctype HanoiDoubleTowers() {
   t[2].p[1].type = 2;
   t[2].p[1].size = 1;
 
-  byte i = 0, j = 1, tmp;
+  byte i = 0, j = 1;
 
   REPEAT:
   if
@@ -57,3 +57,17 @@ active proctype HanoiDoubleTowers() {
 
   FINISH:
 }
+
+#define a1 ((t[0].p[0].type == t[0].p[1].type) -> (t[0].p[0].size >= t[0].p[1].size))
+#define a2 ((t[0].p[1].type == t[0].p[2].type) -> (t[0].p[1].size >= t[0].p[2].size))
+#define a3 ((t[0].p[2].type == t[0].p[3].type) -> (t[0].p[2].size >= t[0].p[3].size))
+
+#define b1 ((t[1].p[0].type == t[1].p[1].type) -> (t[1].p[0].size >= t[1].p[1].size))
+#define b2 ((t[1].p[1].type == t[1].p[2].type) -> (t[1].p[1].size >= t[1].p[2].size))
+#define b3 ((t[1].p[2].type == t[1].p[3].type) -> (t[1].p[2].size >= t[1].p[3].size))
+
+#define c1 ((t[2].p[0].type == t[2].p[1].type) -> (t[2].p[0].size >= t[2].p[1].size))
+#define c2 ((t[2].p[1].type == t[2].p[2].type) -> (t[2].p[1].size >= t[2].p[2].size))
+#define c3 ((t[2].p[2].type == t[2].p[3].type) -> (t[2].p[2].size >= t[2].p[3].size))
+
+ltl first{<>(((Hanoi@REPEAT) -> ((a1 && a2 && a3) && (b1 && b2 && b3) && (c1 && c2 && c3))) U (Hanoi@FINISH))}
